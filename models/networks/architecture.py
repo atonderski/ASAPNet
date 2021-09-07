@@ -7,11 +7,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
-import torch.nn.utils.spectral_norm as spectral_norm
-from models.networks.normalization import SPADE
-from models.networks.normalization import slimSPADE
-from models.networks.condconv import DepthConv
-import functools
 import numpy as np
 
 class ASAPNetsResnetBlock(nn.Module):
@@ -114,10 +109,7 @@ class MySeparableBilinearDownsample(torch.nn.Module):
         # create tent kernel
         kernel = np.arange(1,2*stride+1,2) # ramp up
         kernel = np.concatenate((kernel,kernel[::-1])) # reflect it and concatenate
-        if use_gpu:
-            kernel = torch.Tensor(kernel/np.sum(kernel)).to(device='cuda') # normalize
-        else:
-            kernel = torch.Tensor(kernel / np.sum(kernel))
+        kernel = torch.Tensor(kernel / np.sum(kernel))
         self.register_buffer('kernel_horz', kernel[None,None,None,:].repeat((self.channels,1,1,1)))
         self.register_buffer('kernel_vert', kernel[None,None,:,None].repeat((self.channels,1,1,1)))
 

@@ -84,15 +84,15 @@ def _get_coords(bs, h, w, device, ds, coords_type):
             xsin = xsin.view(1, 1, 1, w).repeat(bs, 1, h, 1)
             ycos = ycos.view(1, 1, h, 1).repeat(bs, 1, 1, w)
             ysin = ysin.view(1, 1, h, 1).repeat(bs, 1, 1, w)
-            coords_cur = th.cat([xcos, xsin, ycos, ysin], 1).to(device)
+            coords_cur = th.cat([xcos, xsin, ycos, ysin], 1)
             if f < f0:
-                coords = th.cat([coords, coords_cur], 1).to(device)
+                coords = th.cat([coords, coords_cur], 1)
             else:
                 coords = coords_cur
             f = f//2
     else:
         raise NotImplementedError()
-    return coords.to(device)
+    return coords
 
 
 class ASAPNetsLRStream(th.nn.Sequential):

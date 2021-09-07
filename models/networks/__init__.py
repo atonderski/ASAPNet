@@ -40,9 +40,6 @@ def modify_commandline_options(parser, is_train):
 def create_network(cls, opt):
     net = cls(opt)
     net.print_network()
-    if len(opt.gpu_ids) > 0:
-        assert(torch.cuda.is_available())
-        net.cuda()
     net.init_weights(opt.init_type, opt.init_variance)
     return net
 
@@ -55,9 +52,3 @@ def define_G(opt):
 def define_D(opt):
     netD_cls = find_network_using_name(opt.netD, 'discriminator')
     return create_network(netD_cls, opt)
-
-
-def define_E(opt):
-    # there exists only one encoder type
-    netE_cls = find_network_using_name('conv', 'encoder')
-    return create_network(netE_cls, opt)
